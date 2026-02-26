@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'http://38.242.233.242/api',  // 🔥 Badilisha hii!
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
@@ -28,10 +28,8 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
-      // Server responded with error
       console.error('❌ Server error:', error.response.status, error.response.data);
     } else if (error.request) {
-      // Request made but no response
       console.error('❌ No response from server');
     } else {
       console.error('❌ Error:', error.message);

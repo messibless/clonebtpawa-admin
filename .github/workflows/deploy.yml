@@ -1,4 +1,4 @@
-name: Deploy Vue App to Server
+name: Deploy React App to Server
 
 on:
   push:
@@ -22,13 +22,14 @@ jobs:
 
       - name: Build App
         run: npm run build
+        # CRA inatengeneza 'build/'
 
       - name: Deploy to Server via Rsync
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzr --delete
-          path: dist/
-          remote_path: /var/www/betpawa/
+          path: build/  # 🔥 BADILISHA HAPA!
+          remote_path: /var/www/betpawa-admin/
           remote_host: ${{ secrets.SERVER_HOST }}
           remote_user: ${{ secrets.SERVER_USER }}
           remote_key: ${{ secrets.SERVER_SSH_KEY }}
