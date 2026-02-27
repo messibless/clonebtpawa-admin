@@ -1,4 +1,4 @@
-name: Deploy React App to Server
+name: Deploy React Admin Panel App to Server
 
 on:
   push:
@@ -8,30 +8,36 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+
+      # 1️⃣ Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v4  
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4  
         with:
           node-version: '22'  
           cache: 'npm'
 
+      # 3️⃣ Install Dependencies
       - name: Install Dependencies
         run: npm ci
 
+      # 4️⃣ Build React App
       - name: Build App
-        run: npm run build
-        # Vite inatengeneza 'dist/'
+        run: npm run build  # Vite build, creates dist/
 
-      - name: Debug - List files
-        run: ls -la dist/  # Angalia kama ipo
+      # 5️⃣ Debug - List files
+      - name: Debug - List dist folder
+        run: ls -la dist/   # Optional, for verification
 
+      # 6️⃣ Deploy to Server via Rsync (COPY CONTENTS ONLY)
       - name: Deploy to Server via Rsync
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzr --delete
-          path: dist/  # 🔥 BADILISHA HAPA kutoka 'build/' kuwa 'dist/'
+          path: dist/*                # 🔥 COPY CONTENTS of dist/, NOT the dist folder itself
           remote_path: /var/www/betpawa-admin/
           remote_host: ${{ secrets.SERVER_HOST }}
           remote_user: ${{ secrets.SERVER_USER }}
