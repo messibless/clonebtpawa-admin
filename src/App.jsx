@@ -24,7 +24,7 @@ function AppContent() {
   
   const location = useLocation();
   const navigate = useNavigate();
-  const API_URL = 'http://127.0.0.1:8000/api';
+  const API_URL = 'https://betpaw.co.tz/api';
 
   const fetchBets = async () => {
     setLoading(true);
