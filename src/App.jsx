@@ -302,7 +302,7 @@ function AppContent() {
 // Main App component with Router
 function App() {
   return (
-    <BrowserRouter >
+    <BrowserRouter basename="/admin-panel/">
       <AppContent />
     </BrowserRouter>
   );
