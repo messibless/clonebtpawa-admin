@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: 'http://38.242.233.242/api',  // 🔥 Badilisha hii!
+  baseURL: 'https://betpaw.co.tz/api/',  // 🔥 Badilisha hii!
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
