@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter , Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import api from './services/api';
 import Statistics from './components/Statistics';
 import CreateBet from './components/CreateBet';
@@ -234,16 +234,16 @@ function AppContent() {
 
           {!loading && (
             <Routes>
-              <Route path="/admin-panel/" element={<Statistics bets={bets} onRefresh={handleRefresh} />} />
+              <Route path="/" element={<Statistics bets={bets} onRefresh={handleRefresh} />} />
               
-              <Route path="/create" element={
+              <Route path="create" element={
                 <CreateBet API_URL={API_URL} onBetCreated={handleRefresh} />
               } />
-              <Route path="/create-fixture" element={<CreateFixture />} />
-              <Route path="/fixtures" element={<FixturesList />} />
-              <Route path="/edit-fixture/:id" element={<EditFixture />} />
+              <Route path="create-fixture" element={<CreateFixture />} />
+              <Route path="fixtures" element={<FixturesList />} />
+              <Route path="edit-fixture/:id" element={<EditFixture />} />
               
-              <Route path="/edit/:id" element={
+              <Route path="edit/:id" element={
                 <EditBet 
                   bet={editingBet}
                   onBetUpdated={handleRefresh}
@@ -251,7 +251,7 @@ function AppContent() {
                 />
               } />
               
-              <Route path="/bets" element={
+              <Route path="bets" element={
                 <BetsList 
                   bets={bets}
                   onRefresh={handleRefresh}
@@ -260,7 +260,7 @@ function AppContent() {
                 />
               } />
               
-              <Route path="/active" element={
+              <Route path="active" element={
                 <ActiveBets 
                   bets={bets.filter(b => b.status === 'OPEN')}
                   onRefresh={handleRefresh}
@@ -269,7 +269,7 @@ function AppContent() {
                 />
               } />
               
-              <Route path="/settled" element={
+              <Route path="settled" element={
                 <SettledBets 
                   bets={bets.filter(b => b.status === 'SETTLED')}
                   onRefresh={handleRefresh}
@@ -278,7 +278,7 @@ function AppContent() {
                 />
               } />
               
-              <Route path="/bet/:id" element={
+              <Route path="bet/:id" element={
                 <BetDetails 
                   bet={selectedBet}
                   onRefresh={handleRefresh}
@@ -288,7 +288,7 @@ function AppContent() {
               } />
 
               {/* 🔥 Add Balance route */}
-              <Route path="/balance" element={
+              <Route path="balance" element={
                 <BalanceManager />
               } />
             </Routes>
@@ -302,9 +302,9 @@ function AppContent() {
 // Main App component with Router
 function App() {
   return (
-    <Router>
+    <BrowserRouter >
       <AppContent />
-    </Router>
+    </BrowserRouter>
   );
 }
 
