@@ -234,7 +234,7 @@ function AppContent() {
 
           {!loading && (
             <Routes>
-              <Route path="/" element={<Statistics bets={bets} onRefresh={handleRefresh} />} />
+              <Route path="/admin-panel/" element={<Statistics bets={bets} onRefresh={handleRefresh} />} />
               
               <Route path="/create" element={
                 <CreateBet API_URL={API_URL} onBetCreated={handleRefresh} />
