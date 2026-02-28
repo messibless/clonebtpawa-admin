@@ -61,26 +61,29 @@ const EditBet = ({ bet, onBetUpdated, onCancel }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+  
+    // Convert id -> match_ref
+    const payload = {
+      ...formData,
+      matches: formData.matches.map(m => ({
+        match_ref: m.id,  // 🔥 Hapa lazima 'match_ref'
+        teams: m.teams,
+        market: m.market,
+        selection: m.selection,
+        odds: m.odds
+      }))
+    };
+  
     try {
-      // Send PUT request to update bet
-      const response = await api.put(`/bets/${bet.id}/`, formData);
+      const response = await api.put(`/bets/${bet.id}/`, payload);
       console.log('✅ Bet updated:', response.data);
-      
-      if (onBetUpdated) {
-        onBetUpdated();
-      }
-      
-      // Navigate back to bets list after successful update
+      if (onBetUpdated) onBetUpdated();
       navigate('/bets');
       alert('Bet updated successfully!');
     } catch (error) {
       console.error('❌ Error updating bet:', error);
-      if (error.response) {
-        setError(JSON.stringify(error.response.data) || 'Error updating bet');
-      } else {
-        setError(error.message);
-      }
+      if (error.response) setError(JSON.stringify(error.response.data) || 'Error updating bet');
+      else setError(error.message);
     } finally {
       setLoading(false);
     }
