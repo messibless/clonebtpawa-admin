@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: 'https://betpaw.co.tz/node-api/api',  
+  baseURL: 'https://betpaw.co.tz/api/',  
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

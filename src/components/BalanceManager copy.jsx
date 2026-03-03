@@ -11,20 +11,17 @@ const BalanceManager = () => {
 
   const fetchBalance = async () => {
     setLoading(true);
-    setError('');
     try {
       const response = await api.get('/balance');
       console.log('✅ Balance fetched:', response.data);
-
       setBalance(response.data);
-
       setFormData({
-        amount: parseFloat(response.data.amount)
+        amount: response.data.amount,
+        currency: response.data.currency
       });
-
     } catch (error) {
       console.error('Error fetching balance:', error);
-      setError(error.response?.data?.message || 'Failed to fetch balance');
+      setError('Failed to fetch balance');
     } finally {
       setLoading(false);
     }
@@ -34,26 +31,40 @@ const BalanceManager = () => {
     fetchBalance();
   }, []);
 
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const response = await api.post('/balance/', {
+        amount: formData.amount
+      });
+      console.log('✅ Balance created:', response.data);
+      setBalance(response.data.data);
+      alert('Balance created successfully!');
+    } catch (error) {
+      console.error('Error creating balance:', error);
+      setError(error.response?.data?.error || 'Failed to create balance');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
     try {
-      const response = await api.patch('/balance', {
-        amount: formData.amount
+      const response = await api.patch('/balance/', {
+        amount: formData.amount,
+        currency: formData.currency
       });
-
       console.log('✅ Balance updated:', response.data);
-
-      // backend returns updated object directly
-      setBalance(response.data);
-
+      setBalance(response.data.data);
       alert('Balance updated successfully!');
-
     } catch (error) {
       console.error('Error updating balance:', error);
-      setError(error.response?.data?.message || 'Failed to update balance');
+      setError(error.response?.data?.error || 'Failed to update balance');
     } finally {
       setLoading(false);
     }
@@ -63,15 +74,15 @@ const BalanceManager = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: parseFloat(value) || 0
+      [name]: name === 'amount' ? parseFloat(value) || 0 : value
     }));
   };
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount, currency) => {
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }).format(amount);
+    }).format(amount) + ' ' + currency;
   };
 
   return (
@@ -91,12 +102,12 @@ const BalanceManager = () => {
             {formatCurrency(balance.amount)}
           </p>
           <p className="text-xs opacity-75 mt-2">
-            Last updated: {new Date(balance.updatedAt).toLocaleString()}
+            Last updated: 
           </p>
         </div>
       )}
 
-      <form onSubmit={handleUpdate} className="space-y-4">
+      <form onSubmit={balance ? handleUpdate : handleCreate} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Balance Amount
@@ -113,12 +124,14 @@ const BalanceManager = () => {
           />
         </div>
 
+       
+
         <button
           type="submit"
           disabled={loading}
           className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-300 font-medium"
         >
-          {loading ? 'Processing...' : 'Update Balance'}
+          {loading ? 'Processing...' : (balance ? 'Update Balance' : 'Create Balance')}
         </button>
       </form>
 
