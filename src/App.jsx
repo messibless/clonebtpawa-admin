@@ -8,9 +8,17 @@ import BetsList from './components/BetsList';
 import ActiveBets from './components/ActiveBets';
 import SettledBets from './components/SettledBets';
 import BetDetails from './components/BetDetails';
+// football fixture
 import FixturesList from './components/FixturesList';
 import CreateFixture from './components/CreateFixture';
 import EditFixture from './components/EditFixture';
+// Efootball fixture
+
+import EfootballList from './components/FixturesList';
+import CreateEfootballFixture from './components/CreateFixture';
+import EditEfootballFixture from './components/EditFixture';
+
+
 import BalanceManager from './components/BalanceManager'; // 🔥 Import BalanceManager
 
 // Wrap the main App content with router hooks
@@ -24,7 +32,8 @@ function AppContent() {
   
   const location = useLocation();
   const navigate = useNavigate();
-  const API_URL = 'https://betpaw.co.tz/api';
+  // const API_URL = 'http://localhost:5000/api';
+  const API_URL = 'https://betpaw.co.tz/node-api/api';
 
   const fetchBets = async () => {
     setLoading(true);
@@ -83,7 +92,22 @@ function AppContent() {
     },
     {
       path: '/fixtures',
-      label: 'Match Fixtures',
+      label: 'Football Match',
+      icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+      path: '/efootball',
+      label: 'eFootball Match',
+      icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+      path: '/basketball',
+      label: 'Basketball Match',
+      icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+      path: '/tennis',
+      label: 'Tennis Match',
       icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
     },
     {
@@ -242,6 +266,12 @@ function AppContent() {
               <Route path="create-fixture" element={<CreateFixture />} />
               <Route path="fixtures" element={<FixturesList />} />
               <Route path="edit-fixture/:id" element={<EditFixture />} />
+
+              {/* efootball */}
+              <Route path="create-fixture" element={<CreateEfootballFixture />} />
+              <Route path="fixtures" element={<EfootballList />} />
+              <Route path="edit-fixture/:id" element={<EditEfootballFixture />} />
+              
               
               <Route path="edit/:id" element={
                 <EditBet 

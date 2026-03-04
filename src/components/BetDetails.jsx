@@ -38,7 +38,7 @@ const BetDetails = ({ bet, onRefresh, onBack, onEdit }) => {
     try {
       console.log(`📤 Sending approve request for bet ${bet.id} with result: ${result}`);
       
-      const response = await api.post(`/bets/${bet.id}/approve/`, { result });
+      const response = await api.patch(`/bets/${bet.id}/approve/`, { result });
       
       console.log('✅ APPROVE RESPONSE:', response.data);
       
@@ -57,12 +57,10 @@ const BetDetails = ({ bet, onRefresh, onBack, onEdit }) => {
       let errorMessage = 'Failed to approve bet';
       
       if (error.response) {
-        // Server responded with error
-        console.log('Error response data:', error.response.data);
         errorMessage = error.response.data?.error || 
-                      error.response.data?.message || 
-                      JSON.stringify(error.response.data) || 
-                      errorMessage;
+                       error.response.data?.message || 
+                       JSON.stringify(error.response.data) || 
+                       errorMessage;
         
         setApproveError(errorMessage);
       } else if (error.request) {

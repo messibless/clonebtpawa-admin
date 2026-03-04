@@ -3,55 +3,42 @@ import axios from 'axios';
 
 const CreateBet = ({ API_URL, onBetCreated }) => {
   const [formData, setFormData] = useState({
-    stake: 1.00,
+    time: '',
+    date: '',
+    stake: '',
     currency: 'TSh',
-    matches: [
-      {
-        id: 'M001',
-        teams: '',
-        market: '1X2',
-        selection: '',
-        odds: 1.00
-      }
-    ]
+    bet_type: 'Accumulator',
+    homeMatche1: '',
+    awayMatche1: '',
+    oddsMatche1: '',
+    scoreMatche1: '',
+    selectionMatche1: '',
+    homeMatche2: '',
+    awayMatche2: '',
+    oddsMatche2: '',
+    scoreMatche2: '',
+    selectionMatche2: ''
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleMatchChange = (index, field, value) => {
-    const newMatches = [...formData.matches];
-    newMatches[index][field] = value;
-    setFormData({ ...formData, matches: newMatches });
+  const calculateTotalOdds = () => {
+    const odds1 = parseFloat(formData.oddsMatche1) || 1;
+    const odds2 = parseFloat(formData.oddsMatche2) || 1;
+    return (odds1 * odds2).toFixed(2);
   };
 
-  const addMatch = () => {
-    const newId = `M${String(formData.matches.length + 1).padStart(3, '0')}`;
+  const calculatePayout = () => {
+    const stake = parseFloat(formData.stake) || 0;
+    return (stake * parseFloat(calculateTotalOdds())).toFixed(2);
+  };
+
+  const handleChange = (e) => {
     setFormData({
       ...formData,
-      matches: [
-        ...formData.matches,
-        {
-          id: newId,
-          teams: '',
-          market: '1X2',
-          selection: '',
-          odds: 1.00
-        }
-      ]
+      [e.target.name]: e.target.value
     });
-  };
-
-  const removeMatch = (index) => {
-    if (formData.matches.length > 1) {
-      const newMatches = formData.matches.filter((_, i) => i !== index);
-      setFormData({ ...formData, matches: newMatches });
-    }
-  };
-
-  const calculateTotalOdds = () => {
-    return formData.matches
-      .reduce((total, match) => total * parseFloat(match.odds || 1), 1)
-      .toFixed(2);
   };
 
   const handleSubmit = async (e) => {
@@ -60,165 +47,246 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
     setError('');
 
     try {
-      const response = await axios.post(`${API_URL}/bets/`, formData);
-      onBetCreated();
+      const payload = {
+        ...formData,
+        total_odds: calculateTotalOdds(),
+        payout: calculatePayout()
+      };
+
+      await axios.post(`${API_URL}/bets`, payload);
+      alert('Bet created successfully!');
+      onBetCreated && onBetCreated();
+
       // Reset form
       setFormData({
-        stake: 1.00,
+        time: '',
+        date: '',
+        stake: '',
         currency: 'TSh',
-        matches: [
-          {
-            id: 'M001',
-            teams: '',
-            market: '1X2',
-            selection: '',
-            odds: 1.00
-          }
-        ]
+        bet_type: 'Accumulator',
+        homeMatche1: '',
+        awayMatche1: '',
+        oddsMatche1: '',
+        scoreMatche1: '',
+        selectionMatche1: '',
+        homeMatche2: '',
+        awayMatche2: '',
+        oddsMatche2: '',
+        scoreMatche2: '',
+        selectionMatche2: ''
       });
-      alert('Bet created successfully!');
-    } catch (error) {
-      setError(error.response?.data?.message || 'Error creating bet');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error creating bet');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Create New Bet</h2>
+    <div className="max-w-4xl mx-auto px-4">
+      <h2 className="text-2xl font-bold mb-6">Create New Bet</h2>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-6">
-        {/* Stake and Currency */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Stake Amount
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              value={formData.stake}
-              onChange={(e) => setFormData({ ...formData, stake: parseFloat(e.target.value) })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              required
+      <form onSubmit={handleSubmit} className="bg-white shadow rounded-xl p-4 md:p-6 space-y-6">
+        
+        {/* Time & Date - Responsive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            name="time"
+            placeholder="Time (e.g. 2:30 PM)"
+            value={formData.time}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+            required
+          />
+          <input
+            type="text"
+            name="date"
+            placeholder="Date (e.g. Monday 23/3)"
+            value={formData.date}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+            required
+          />
+        </div>
+
+        {/* Stake, Currency, Bet Type - Responsive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="number"
+            step="0.01"
+            name="stake"
+            placeholder="Stake"
+            value={formData.stake}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+            required
+          />
+          <select
+            name="currency"
+            value={formData.currency}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+          >
+            <option value="TSh">TSh</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+          </select>
+          <select
+            name="bet_type"
+            value={formData.bet_type}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+          >
+            <option value="Single">Single</option>
+            <option value="Accumulator">Accumulator</option>
+          </select>
+        </div>
+
+        {/* MATCH 1 */}
+        <div className="border p-4 rounded-lg space-y-3">
+          <h3 className="font-semibold text-lg">Match 1</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input 
+              type="text" 
+              name="homeMatche1" 
+              placeholder="Home Team"
+              value={formData.homeMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="text" 
+              name="awayMatche1" 
+              placeholder="Away Team"
+              value={formData.awayMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="number" 
+              step="0.01" 
+              name="oddsMatche1" 
+              placeholder="Odds"
+              value={formData.oddsMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="text" 
+              name="scoreMatche1" 
+              placeholder="Score (e.g 0-0)"
+              value={formData.scoreMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="text" 
+              name="selectionMatche1" 
+              placeholder="Selection (e.g. Home Win)"
+              value={formData.selectionMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full md:col-span-2" 
+              required 
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Currency
-            </label>
-            <select
-              value={formData.currency}
-              onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="TSh">TSh (Tanzanian Shilling)</option>
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-            </select>
+        </div>
+
+        {/* MATCH 2 */}
+        <div className="border p-4 rounded-lg space-y-3">
+          <h3 className="font-semibold text-lg">Match 2</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input 
+              type="text" 
+              name="homeMatche2" 
+              placeholder="Home Team"
+              value={formData.homeMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="text" 
+              name="awayMatche2" 
+              placeholder="Away Team"
+              value={formData.awayMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="number" 
+              step="0.01" 
+              name="oddsMatche2" 
+              placeholder="Odds"
+              value={formData.oddsMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="text" 
+              name="scoreMatche2" 
+              placeholder="Score (e.g 0-0)"
+              value={formData.scoreMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+
+            <input 
+              type="text" 
+              name="selectionMatche2" 
+              placeholder="Selection (e.g. Away Win)"
+              value={formData.selectionMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full md:col-span-2" 
+              required 
+            />
           </div>
         </div>
 
-        {/* Matches Section */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">Matches</h3>
-            <button
-              type="button"
-              onClick={addMatch}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-            >
-              + Add Match
-            </button>
+        {/* SUMMARY */}
+        <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+            <span className="font-medium">Total Odds:</span>
+            <strong className="text-xl">{calculateTotalOdds()}</strong>
           </div>
-
-          {formData.matches.map((match, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4 mb-4">
-              <div className="flex justify-between items-center mb-3">
-                <span className="font-medium text-gray-700">Match {match.id}</span>
-                {formData.matches.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeMatch(index)}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="Teams (e.g., Man United vs Arsenal)"
-                  value={match.teams}
-                  onChange={(e) => handleMatchChange(index, 'teams', e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-                <select
-                  value={match.market}
-                  onChange={(e) => handleMatchChange(index, 'market', e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="1X2">1X2 (Match Result)</option>
-                  <option value="Over/Under">Over/Under</option>
-                  <option value="Both Teams to Score">Both Teams to Score</option>
-                  <option value="Correct Score">Correct Score</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder="Selection (e.g., Man United)"
-                  value={match.selection}
-                  onChange={(e) => handleMatchChange(index, 'selection', e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-                <input
-                  type="number"
-                  step="0.01"
-                  placeholder="Odds"
-                  value={match.odds}
-                  onChange={(e) => handleMatchChange(index, 'odds', parseFloat(e.target.value))}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                  min="1.00"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Summary */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600">Total Odds:</span>
-            <span className="text-xl font-bold text-blue-600">{calculateTotalOdds()}</span>
-          </div>
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-gray-600">Potential Payout:</span>
-            <span className="text-xl font-bold text-green-600">
-              {(formData.stake * parseFloat(calculateTotalOdds())).toFixed(2)} {formData.currency}
-            </span>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mt-2">
+            <span className="font-medium">Potential Payout:</span>
+            <strong className="text-xl text-green-600">
+              {calculatePayout()} {formData.currency}
+            </strong>
           </div>
         </div>
 
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-600 text-sm">{error}</p>
+          <div className="text-red-600 text-sm bg-red-50 p-3 rounded">
+            {error}
           </div>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-300 font-medium"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition duration-200 disabled:opacity-50"
         >
           {loading ? 'Creating...' : 'Create Bet'}
         </button>
+
       </form>
     </div>
   );
