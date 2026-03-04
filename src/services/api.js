@@ -3,7 +3,7 @@ import axios from 'axios';
 // http://localhost:5000/api
 // Create axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',  
+  baseURL: 'https://betpaw.co.tz/node-api/api',  
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
