@@ -1,8 +1,9 @@
 import axios from 'axios';
-
+// baseURL: 'https://betpaw.co.tz/node-api/api',  
+// http://localhost:5000/api
 // Create axios instance
 const api = axios.create({
-  baseURL: 'https://betpaw.co.tz/node-api/api',  
+  baseURL: 'http://localhost:5000/api',  
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',

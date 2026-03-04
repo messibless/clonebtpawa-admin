@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter , Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import api from './services/api';
 import Statistics from './components/Statistics';
 import CreateBet from './components/CreateBet';
@@ -13,13 +13,10 @@ import FixturesList from './components/FixturesList';
 import CreateFixture from './components/CreateFixture';
 import EditFixture from './components/EditFixture';
 // Efootball fixture
-
 import EfootballList from './components/FixturesList';
 import CreateEfootballFixture from './components/CreateFixture';
 import EditEfootballFixture from './components/EditFixture';
-
-
-import BalanceManager from './components/BalanceManager'; // 🔥 Import BalanceManager
+import BalanceManager from './components/BalanceManager';
 
 // Wrap the main App content with router hooks
 function AppContent() {
@@ -32,8 +29,8 @@ function AppContent() {
   
   const location = useLocation();
   const navigate = useNavigate();
-  // const API_URL = 'http://localhost:5000/api';
-  const API_URL = 'https://betpaw.co.tz/node-api/api';
+  const API_URL = 'http://localhost:5000/api';
+  // const API_URL = 'https://betpaw.co.tz/node-api/api';
 
   const fetchBets = async () => {
     setLoading(true);
@@ -125,7 +122,6 @@ function AppContent() {
       label: 'Settled Bets',
       icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
     },
-    // 🔥 Add Balance link
     {
       path: '/balance',
       label: 'Account Balance',
@@ -170,20 +166,21 @@ function AppContent() {
       {/* Overlay for mobile when sidebar is open */}
       {sidebarOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-transparent z-40"
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Fixed with proper scrolling */}
       <div className={`
-        fixed left-0 top-0 w-64 h-full bg-white shadow-lg overflow-y-auto z-50
+        fixed left-0 top-0 w-64 h-full bg-white shadow-lg z-50
+        flex flex-col
         transition-transform duration-300 ease-in-out
         lg:translate-x-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Close button for mobile */}
-        <div className="lg:hidden p-4 flex justify-end">
+        <div className="lg:hidden p-4 flex justify-end border-b">
           <button
             onClick={() => setSidebarOpen(false)}
             className="p-1 rounded-lg hover:bg-gray-100"
@@ -194,24 +191,26 @@ function AppContent() {
           </button>
         </div>
 
-        <div className="p-6">
+        {/* Header - Fixed at top */}
+        <div className="p-6 border-b">
           <h1 className="text-2xl font-bold text-blue-600">BetAdmin</h1>
           <p className="text-sm text-gray-500 mt-1">Management Dashboard</p>
         </div>
         
-        <nav className="mt-6">
+        {/* Navigation - Scrollable area */}
+        <nav className="flex-1 overflow-y-auto overscroll-contain py-4">
           {navigationLinks.map((link) => (
             <button
               key={link.path}
               onClick={() => handleNavClick(link.path)}
               className={getNavItemClass(link.path)}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={link.icon} />
               </svg>
-              <span>{link.label}</span>
+              <span className="flex-1 text-left truncate">{link.label}</span>
               {link.path === '/active' && (
-                <span className="ml-auto bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                <span className="ml-auto bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full flex-shrink-0">
                   {bets.filter(b => b.status === 'OPEN').length}
                 </span>
               )}
@@ -219,8 +218,8 @@ function AppContent() {
           ))}
         </nav>
 
-        {/* Quick Stats in Sidebar */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gray-50 border-t">
+        {/* Quick Stats in Sidebar - Fixed at bottom */}
+        <div className="p-4 bg-gray-50 border-t mt-auto">
           <div className="text-xs text-gray-500">
             <div className="flex justify-between mb-1">
               <span>Total Bets:</span>
@@ -246,6 +245,7 @@ function AppContent() {
       <div className={`
         transition-all duration-300 ease-in-out
         lg:ml-64
+        min-h-screen
         ${sidebarOpen ? 'lg:ml-64' : ''}
         pt-16 lg:pt-0
       `}>
@@ -268,10 +268,9 @@ function AppContent() {
               <Route path="edit-fixture/:id" element={<EditFixture />} />
 
               {/* efootball */}
-              <Route path="create-fixture" element={<CreateEfootballFixture />} />
-              <Route path="fixtures" element={<EfootballList />} />
-              <Route path="edit-fixture/:id" element={<EditEfootballFixture />} />
-              
+              <Route path="create-efootball" element={<CreateEfootballFixture />} />
+              <Route path="efootball" element={<EfootballList />} />
+              <Route path="edit-efootball/:id" element={<EditEfootballFixture />} />
               
               <Route path="edit/:id" element={
                 <EditBet 
@@ -317,7 +316,6 @@ function AppContent() {
                 />
               } />
 
-              {/* 🔥 Add Balance route */}
               <Route path="balance" element={
                 <BalanceManager />
               } />
