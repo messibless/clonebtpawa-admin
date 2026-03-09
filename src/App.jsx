@@ -13,10 +13,26 @@ import FixturesList from './components/FixturesList';
 import CreateFixture from './components/CreateFixture';
 import EditFixture from './components/EditFixture';
 // Efootball fixture
-import EfootballList from './components/FixturesList';
-import CreateEfootballFixture from './components/CreateFixture';
-import EditEfootballFixture from './components/EditFixture';
+import EfootballList from './components/efootball/FixturesList';
+import CreateEfootball from './components/efootball/CreateEfootball';
+import EditEfootball from './components/efootball/EditEfootball';
 import BalanceManager from './components/BalanceManager';
+// Basketball fixture
+import TennisList from './components/tennis/TennisList';
+import TennisCreate from './components/tennis/TennisCreate';
+import EditTennis from './components/tennis/EditTennis';
+
+// tennis fixture
+import BasketballList from './components/basketball/BasketballList';
+import BasketballCreate from './components/basketball/BasketballCreate';
+import EditBasketball from './components/basketball/EditBasketball';
+
+
+// live fixture
+import LivesList from './components/lives/LivesList';
+import LiveCreate from './components/lives/LiveCreate';
+import EditLive from './components/lives/EditLive';
+
 
 // Wrap the main App content with router hooks
 function AppContent() {
@@ -95,6 +111,11 @@ function AppContent() {
     {
       path: '/efootball',
       label: 'eFootball Match',
+      icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
+    },
+    {
+      path: '/live',
+      label: 'Live Match',
       icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
     },
     {
@@ -268,10 +289,28 @@ function AppContent() {
               <Route path="edit-fixture/:id" element={<EditFixture />} />
 
               {/* efootball */}
-              <Route path="create-efootball" element={<CreateEfootballFixture />} />
+              <Route path="create-efootball" element={< CreateEfootball />} />
               <Route path="efootball" element={<EfootballList />} />
-              <Route path="edit-efootball/:id" element={<EditEfootballFixture />} />
+              <Route path="edit-efootball/:id" element={<EditEfootball />} />
               
+              
+              {/* basketball */}
+              <Route path="create-basketball" element={< BasketballCreate />} />
+              <Route path="basketball" element={<BasketballList />} />
+              <Route path="edit-basketball/:id" element={<EditBasketball />} />
+              
+              
+              {/* tennis */}
+              <Route path="create-tennis" element={< TennisCreate />} />
+              <Route path="tennis" element={<TennisList />} />
+              <Route path="edit-tennis/:id" element={<EditTennis />} />
+              
+               {/* live */}
+               <Route path="create-live" element={< LiveCreate />} />
+              <Route path="live" element={<LivesList />} />
+              <Route path="edit-live/:id" element={<EditLive />} />
+              
+
               <Route path="edit/:id" element={
                 <EditBet 
                   bet={editingBet}

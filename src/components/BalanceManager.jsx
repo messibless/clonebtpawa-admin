@@ -63,7 +63,7 @@ const BalanceManager = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: parseFloat(value) || 0
+      [name]: parseFloat(value) 
     }));
   };
 

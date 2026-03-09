@@ -120,7 +120,7 @@ const BetsList = ({ bets, onRefresh, onSelectBet, onEdit }) => {
                 <td className="px-4 py-3 text-sm text-gray-900">
                   {bet.stake} {bet.currency}
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-900">{bet.odds}</td>
+                <td className="px-4 py-3 text-sm text-gray-900">{bet.total_odds}</td>
                 <td className="px-4 py-3 text-sm text-gray-900">
                   {bet.payout || '-'} {bet.currency}
                 </td>

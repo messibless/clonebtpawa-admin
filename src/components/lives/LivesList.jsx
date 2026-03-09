@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
-const FixturesList = () => {
+const LivesList = () => {
   const navigate = useNavigate();
   const [fixtures, setFixtures] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -13,12 +13,12 @@ const FixturesList = () => {
   const fetchFixtures = async () => {
     setLoading(true);
     try {
-      const response = await api.get('/efootball/');
+      const response = await api.get('/live/');
       setFixtures(response.data);
-      console.log("efootball data", response.data);
+      console.log("live data", response.data);
     } catch (err) {
       console.error(err);
-      setError('Failed to load efootball fixtures.');
+      setError('Failed to load live fixtures.');
     } finally {
       setLoading(false);
     }
@@ -29,13 +29,13 @@ const FixturesList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this fixture?')) return;
+    if (!window.confirm('Are you sure you want to delete this live?')) return;
     try {
-      await api.delete(`/efootball/${id}/`);
+      await api.delete(`/live/${id}/`);
       fetchFixtures();
     } catch (err) {
       console.error(err);
-      alert('Failed to delete efootball fixture.');
+      alert('Failed to delete live fixture.');
     }
   };
 
@@ -82,7 +82,7 @@ const FixturesList = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl font-bold text-gray-800"> Match eFootball</h2>
+        <h2 className="text-2xl font-bold text-gray-800"> Match live</h2>
         <div className="flex gap-2">
           {fixtures.length > 0 && (
             <button onClick={() => setShowBulkActions(!showBulkActions)}
@@ -90,9 +90,9 @@ const FixturesList = () => {
               Bulk Actions
             </button>
           )}
-          <button onClick={() => navigate('/create-efootball')}
+          <button onClick={() => navigate('/create-live')}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm flex items-center gap-2">
-            Add efootball
+            Add live
           </button>
         </div>
       </div>
@@ -120,8 +120,8 @@ const FixturesList = () => {
       {/* Fixtures Grid */}
       {fixtures.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No football available</p>
-          <button onClick={() => navigate('/create-efootball')} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create First Efootball</button>
+          <p className="text-gray-500">No live available</p>
+          <button onClick={() => navigate('/create-live')} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create First live</button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -138,13 +138,22 @@ const FixturesList = () => {
                   <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{fixture.league.split('/').pop()}</span>
                   <span className="text-xs text-gray-400">ID: {fixture.id}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                  <span>{fixture.date}</span> • <span>{fixture.time}</span>
+                <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                  <span>{fixture.date}</span> • <span>{fixture.time}</span> <span>{fixture.term} Half</span>
                 </div>
                 <div className="text-center mb-4">
-                  <div className="font-bold text-lg">{fixture.homeTeam}</div>
+                  <div className="font-bold text-lg flex gap-2 items-center justify-center">
+                    <span>{fixture.homeTeam}</span>
+                    <span className='flex items-center'><p className='font-normal text-amber-300 '>Goals</p> : {fixture.homeGoals}</span>
+
+                  </div>
                   <div className="text-sm my-1">vs</div>
-                  <div className="font-bold text-lg">{fixture.awayTeam}</div>
+
+                  <div className="font-bold text-lg flex gap-2 items-center justify-center">
+                    <span>{fixture.awayTeam}</span>
+                    <span className='flex items-center'><p className='font-normal text-amber-300 '>Goals</p> : {fixture.homeGoals}</span>
+
+                  </div>
                 </div>
                 <div className="flex gap-2 mb-4">
                   <div className={getOddsClass(fixture.homeHasFireIcon)}>
@@ -168,7 +177,7 @@ const FixturesList = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 pt-3 border-t">
-                  <button onClick={() => navigate(`/edit-efootball/${fixture.id}`, { state: { fixture } })}
+                  <button onClick={() => navigate(`/edit-live/${fixture.id}`, { state: { fixture } })}
                     className="flex-1 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 text-sm">Edit</button>
                   <button onClick={() => handleDelete(fixture.id)}
                     className="flex-1 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">Delete</button>
@@ -182,4 +191,4 @@ const FixturesList = () => {
   );
 };
 
-export default FixturesList;
+export default LivesList;
