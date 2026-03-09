@@ -10,6 +10,12 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
     bet_type: 'Accumulator',
     homeMatche1: '',
     awayMatche1: '',
+    leagueMatche1:'',
+    leagueMatche2:'',
+    timeMatche1:'',
+    timeMatche2:'',
+    dateMatche1:'',
+    dateMatche2:'',
     oddsMatche1: '',
     scoreMatche1: '',
     selectionMatche1: '',
@@ -66,6 +72,12 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
         bet_type: 'Accumulator',
         homeMatche1: '',
         awayMatche1: '',
+        leagueMatche1:'',
+        leagueMatche2:'',
+        timeMatche1:'',
+        timeMatche2:'',
+        dateMatche1:'',
+        dateMatche2:'',
         oddsMatche1: '',
         scoreMatche1: '',
         selectionMatche1: '',
@@ -93,7 +105,7 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
           <input
             type="text"
             name="time"
-            placeholder="Time (e.g. 2:30 PM)"
+            placeholder="Time of bet (e.g. 2:30 PM)"
             value={formData.time}
             onChange={handleChange}
             className="border p-2 rounded w-full"
@@ -102,7 +114,7 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
           <input
             type="text"
             name="date"
-            placeholder="Date (e.g. Monday 23/3)"
+            placeholder="Date of bet (e.g. Monday 23/3"
             value={formData.date}
             onChange={handleChange}
             className="border p-2 rounded w-full"
@@ -148,6 +160,24 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
           <h3 className="font-semibold text-lg">Match 1</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input 
+              type="text" 
+              name="timeMatche1" 
+              placeholder="time for match 1"
+              value={formData.timeMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+            <input 
+              type="text" 
+              name="dateMatche1" 
+              placeholder="date match 1"
+              value={formData.dateMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
             <input 
               type="text" 
               name="homeMatche1" 
@@ -195,7 +225,16 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
               placeholder="Selection (e.g. Home Win)"
               value={formData.selectionMatche1} 
               onChange={handleChange}
-              className="border p-2 rounded w-full md:col-span-2" 
+              className="border p-2 rounded w-full" 
+              required 
+            />
+             <input 
+              type="text" 
+              name="leagueMatche1" 
+              placeholder="name of the league"
+              value={formData.leagueMatche1} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full " 
               required 
             />
           </div>
@@ -206,6 +245,25 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
           <h3 className="font-semibold text-lg">Match 2</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <input 
+              type="text" 
+              name="timeMatche2" 
+              placeholder="time for match 2"
+              value={formData.timeMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
+            <input 
+              type="text" 
+              name="dateMatche2" 
+              placeholder="date for match 2"
+              value={formData.dateMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full" 
+              required 
+            />
             <input 
               type="text" 
               name="homeMatche2" 
@@ -253,7 +311,16 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
               placeholder="Selection (e.g. Away Win)"
               value={formData.selectionMatche2} 
               onChange={handleChange}
-              className="border p-2 rounded w-full md:col-span-2" 
+              className="border p-2 rounded w-full " 
+              required 
+            />
+            <input 
+              type="text" 
+              name="leagueMatche2" 
+              placeholder="name of the league"
+              value={formData.leagueMatche2} 
+              onChange={handleChange}
+              className="border p-2 rounded w-full " 
               required 
             />
           </div>
