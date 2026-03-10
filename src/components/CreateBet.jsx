@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const CreateBet = ({ API_URL, onBetCreated }) => {
   const [formData, setFormData] = useState({
+    id:'',
     time: '',
     date: '',
     stake: '',
@@ -65,6 +66,7 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
 
       // Reset form
       setFormData({
+        id:'',
         time: '',
         date: '',
         stake: '',
@@ -102,6 +104,15 @@ const CreateBet = ({ API_URL, onBetCreated }) => {
         
         {/* Time & Date - Responsive Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+            type="number"
+            name="id"
+            placeholder="ID #"
+            value={formData.id}
+            onChange={handleChange}
+            className="border p-2 rounded w-full col-span-1"
+            required
+          />
           <input
             type="text"
             name="time"
