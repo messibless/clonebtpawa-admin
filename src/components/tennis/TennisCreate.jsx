@@ -17,6 +17,7 @@ const TennisCreate = () => {
     awayOdds: '',
     awayHasFireIcon: false,
     betCount: '',
+    market:'',
     hasBoostedOdds: false,
     hasTwoUp: false
   });
@@ -58,6 +59,7 @@ const TennisCreate = () => {
         awayOdds: parseFloat(formData.awayOdds),
         awayHasFireIcon: formData.awayHasFireIcon,
         betCount: parseInt(formData.betCount) || 0,
+        market:parseInt(formData.market) || 0,
         hasBoostedOdds: formData.hasBoostedOdds,
         hasTwoUp: formData.hasTwoUp
       };
@@ -223,6 +225,16 @@ const TennisCreate = () => {
               type="number"
               name="betCount"
               value={formData.betCount}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-medium">Markets Count</label>
+            <input
+              type="number"
+              name="market"
+              value={formData.market}
               onChange={handleInputChange}
               className="w-full p-2 border rounded"
             />

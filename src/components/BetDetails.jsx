@@ -92,6 +92,8 @@ const BetDetails = ({ bet, onRefresh, onBack, onEdit }) => {
     }
   };
 
+
+
   // Format currency
   const formatCurrency = (amount, currency) => {
     return new Intl.NumberFormat('en-US', {
@@ -147,6 +149,9 @@ const BetDetails = ({ bet, onRefresh, onBack, onEdit }) => {
           </button>
         </div>
       </div>
+
+
+
 
       {/* Raw JSON Data Display */}
       {showRawData && (

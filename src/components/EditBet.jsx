@@ -66,7 +66,7 @@ const EditBet = ({ bet, onBetUpdated, onCancel }) => {
     const payload = {
       ...formData,
       matches: formData.matches.map(m => ({
-        match_ref: m.id,  // 🔥 Hapa lazima 'match_ref'
+        match_ref: m.id,  
         teams: m.teams,
         market: m.market,
         selection: m.selection,
@@ -76,7 +76,7 @@ const EditBet = ({ bet, onBetUpdated, onCancel }) => {
   
     try {
       const response = await api.put(`/bets/${bet.id}/`, payload);
-      console.log('✅ Bet updated:', response.data);
+      console.log(' Bet updated:', response.data);
       if (onBetUpdated) onBetUpdated();
       navigate('/bets');
       alert('Bet updated successfully!');

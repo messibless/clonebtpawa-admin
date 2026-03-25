@@ -161,7 +161,10 @@ const FixturesList = () => {
                   </div>
                 </div>
                 <div className="flex items-center justify-between mb-4">
+                  <div className='flex justify-between items-center  gap-5'>
                   <span className="text-sm text-gray-600">🎲 {fixture.betCount} bets</span>
+                  <span className="text-sm text-gray-600"> {fixture.market} +Market</span>
+                  </div>
                   <div className="flex gap-1">
                     {fixture.hasBoostedOdds && <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">⚡ Boosted</span>}
                     {fixture.hasTwoUp && <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">2️⃣ 2UP</span>}
